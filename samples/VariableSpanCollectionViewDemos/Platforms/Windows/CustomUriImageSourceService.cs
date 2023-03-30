@@ -1,6 +1,4 @@
 ﻿#nullable enable
-using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Maui;
@@ -20,7 +18,7 @@ namespace VariableSpanCollectionViewDemos
 			var imageLoader = imageSource;
 
 			if (imageLoader?.Uri == null)
-				return null;
+				return Task.FromResult<IImageSourceServiceResult<WImageSource>?>(null);
 
 			var image = new BitmapImage();
 			image.UriSource = imageLoader.Uri;

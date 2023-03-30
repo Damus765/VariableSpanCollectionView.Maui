@@ -1,7 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
 using VariableSpanCollectionViewDemos.ViewModels;
-using VariableSpanCollectionView.Maui;
-using VariableSpanCollectionViewDemos.Models;
 
 namespace VariableSpanCollectionViewDemos.Views
 {

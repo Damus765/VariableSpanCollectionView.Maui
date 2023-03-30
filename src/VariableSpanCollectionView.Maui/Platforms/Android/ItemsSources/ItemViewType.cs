@@ -1,5 +1,4 @@
-﻿
-// Cloned from the main .NET MAUI repository.
+﻿// Cloned from the main .NET MAUI repository.
 // No changes were made.
 // https://github.com/dotnet/maui/tree/main/src/Controls/src/Core/Handlers/Items/Android/ItemViewType.cs
 namespace VariableSpanCollectionView.Maui

@@ -13,40 +13,8 @@ namespace VariableSpanCollectionView.Maui
 		where TAdapter : ItemsViewAdapter<TItemsView, TItemsViewSource>
 		where TItemsViewSource : IItemsViewSource
 	{
-		bool _disposed;
-		ItemTouchHelper _itemTouchHelper;
-		SimpleItemTouchHelperCallback _itemTouchHelperCallback;
-
 		public VariableSpanMauiRecyclerView(Context context, Func<IItemsLayout> getItemsLayout, Func<TAdapter> getAdapter) : base(context, getItemsLayout, getAdapter)
 		{
-		}
-
-		protected override ItemDecoration CreateSpacingDecoration(IItemsLayout itemsLayout)
-		{
-			return new EqualSpacingItemDecoration(Context, itemsLayout);
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && !_disposed)
-			{
-				if (_itemTouchHelper != null)
-				{
-					_itemTouchHelper.AttachToRecyclerView(null);
-					_itemTouchHelper.Dispose();
-					_itemTouchHelper = null;
-				}
-
-				if (_itemTouchHelperCallback != null)
-				{
-					_itemTouchHelperCallback.Dispose();
-					_itemTouchHelperCallback = null;
-				}
-
-				_disposed = true;
-			}
-
-			base.Dispose(disposing);
 		}
 
 		protected override void LayoutPropertyChanged(object sender, PropertyChangedEventArgs propertyChanged)
@@ -106,65 +74,6 @@ namespace VariableSpanCollectionView.Maui
 					return layoutManager;
 				default:
 					return base.SelectLayoutManager(layoutSpecification);
-			}
-		}
-
-		public override void UpdateAdapter()
-		{
-			base.UpdateAdapter();
-
-			_itemTouchHelperCallback?.SetAdapter(ItemsViewAdapter as IItemTouchHelperAdapter);
-		}
-
-		public void UpdateCanReorderItems()
-		{
-			var canReorderItems = (ItemsView as VariableSpanCollectionView)?.CanReorderItems == true;
-
-			if (canReorderItems)
-			{
-				if (_itemTouchHelperCallback == null)
-				{
-					_itemTouchHelperCallback = new SimpleItemTouchHelperCallback();
-				}
-				if (_itemTouchHelper == null)
-				{
-					_itemTouchHelper = new ItemTouchHelper(_itemTouchHelperCallback);
-					_itemTouchHelper.AttachToRecyclerView(this);
-				}
-				_itemTouchHelperCallback?.SetAdapter(ItemsViewAdapter as IItemTouchHelperAdapter);
-			}
-			else
-			{
-				if (_itemTouchHelper != null)
-				{
-					_itemTouchHelper.AttachToRecyclerView(null);
-					_itemTouchHelper.Dispose();
-					_itemTouchHelper = null;
-				}
-				if (_itemTouchHelperCallback != null)
-				{
-					_itemTouchHelperCallback.Dispose();
-					_itemTouchHelperCallback = null;
-				}
-			}
-		}
-
-		protected override void UpdateItemSpacing()
-		{
-			base.UpdateItemSpacing();
-
-			for (int i = 0; i < ItemDecorationCount; i++)
-			{
-				var itemDecoration = GetItemDecorationAt(i);
-				if (itemDecoration is EqualSpacingItemDecoration spacingDecoration)
-				{
-					// EqualSpacingItemDecoration applies spacing to all items & all 4 sides of the items.
-					// We need to adjust the padding on the RecyclerView so this spacing isn't visible around the outer edge of our control.
-					// Horizontal & vertical spacing should only exist between items.
-					var horizontalPadding = -spacingDecoration.HorizontalOffset;
-					var verticalPadding = -spacingDecoration.VerticalOffset;
-					SetPadding(horizontalPadding, verticalPadding, horizontalPadding, verticalPadding);
-				}
 			}
 		}
 

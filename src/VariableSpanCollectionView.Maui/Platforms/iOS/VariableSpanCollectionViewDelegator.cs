@@ -5,7 +5,7 @@ using Microsoft.Maui.Controls.Handlers.Items;
 
 namespace VariableSpanCollectionView.Maui
 {
-	public class VariableSpanCollectionViewDelegator<TItemsView, TViewController> : GroupableItemsViewDelegator<TItemsView, TViewController>
+	public class VariableSpanCollectionViewDelegator<TItemsView, TViewController> : ReorderableItemsViewDelegator<TItemsView, TViewController>
 		where TItemsView : VariableSpanCollectionView
 		where TViewController : VariableSpanCollectionViewController<TItemsView>
 	{
@@ -34,30 +34,6 @@ namespace VariableSpanCollectionView.Maui
 			{
 				return base.GetSizeForItem(collectionView, layout, indexPath);
 			}
-		}
-
-		public override NSIndexPath GetTargetIndexPathForMove(UICollectionView collectionView, NSIndexPath originalIndexPath, NSIndexPath proposedIndexPath)
-		{
-			NSIndexPath targetIndexPath;
-
-			var itemsView = ViewController.ItemsView;
-			if (itemsView?.IsGrouped == true)
-			{
-				if (originalIndexPath.Section == proposedIndexPath.Section || itemsView.CanMixGroups)
-				{
-					targetIndexPath = proposedIndexPath;
-				}
-				else
-				{
-					targetIndexPath = originalIndexPath;
-				}
-			}
-			else
-			{
-				targetIndexPath = proposedIndexPath;
-			}
-
-			return targetIndexPath;
 		}
 	}
 }

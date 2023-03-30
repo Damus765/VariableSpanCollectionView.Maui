@@ -7,13 +7,8 @@ namespace VariableSpanCollectionView.Maui
 	{
 		public static MauiAppBuilder RegisterVariableSpanCollectionView(this MauiAppBuilder appHostBuilder)
 		{
-			if (appHostBuilder is null)
-			{
-				throw new ArgumentNullException(nameof(appHostBuilder));
-			}
-
+			ArgumentNullException.ThrowIfNull(appHostBuilder);
 			appHostBuilder.ConfigureMauiHandlers(handlers => handlers.AddHandler<VariableSpanCollectionView, VariableSpanCollectionViewHandler>());
-
 			return appHostBuilder;
 		}
 	}

@@ -1,12 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using CoreGraphics;
 using Foundation;
-using ObjCRuntime;
-using UIKit;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Handlers.Items;
 using Microsoft.Maui.Graphics;
+using UIKit;
 
 namespace VariableSpanCollectionView.Maui
 {
@@ -72,7 +70,7 @@ namespace VariableSpanCollectionView.Maui
 				{
 					var item = itemsSource[NSIndexPath.FromItemSection(itemIndex, 0)];
 					var columnSpan = ItemsLayout.ItemSpanLookup?.GetColumnSpan(item) ?? 1;
-					column = column + columnSpan;
+					column += columnSpan;
 					if (column >= max)
 					{
 						return max;
@@ -102,7 +100,7 @@ namespace VariableSpanCollectionView.Maui
 				{
 					var item = itemsSource[NSIndexPath.FromItemSection(itemIndex, 0)];
 					var itemSpan = ItemsLayout.ItemSpanLookup?.GetColumnSpan(item) ?? 1;
-					currentColumn = currentColumn + itemSpan;
+					currentColumn += itemSpan;
 					if (currentColumn > numberOfColumns)
 					{
 						currentColumn = itemSpan;
@@ -112,7 +110,7 @@ namespace VariableSpanCollectionView.Maui
 
 				if (fitHeight > 0)
 				{
-					fitHeight = fitHeight - ItemsLayout.VerticalItemSpacing;
+					fitHeight -= ItemsLayout.VerticalItemSpacing;
 				}
 
 				return new Size(fitWidth, fitHeight);

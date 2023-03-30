@@ -1,33 +1,24 @@
-﻿using System.Collections.Specialized;
-using Microsoft.Maui.Controls.Handlers.Items;
+﻿using Microsoft.Maui.Controls.Handlers.Items;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
-using WThickness = Microsoft.UI.Xaml.Thickness;
 using WSetter = Microsoft.UI.Xaml.Setter;
 using WStyle = Microsoft.UI.Xaml.Style;
+using WThickness = Microsoft.UI.Xaml.Thickness;
 
 namespace VariableSpanCollectionView.Maui
 {
-	public partial class VariableSpanCollectionViewHandler : GroupableItemsViewHandler<VariableSpanCollectionView>
+	public partial class VariableSpanCollectionViewHandler : ReorderableItemsViewHandler<VariableSpanCollectionView>
 	{
-		bool _trackerAllowDrop;
-
 		protected override void ConnectHandler(ListViewBase nativeView)
 		{
 			base.ConnectHandler(nativeView);
-
 			nativeView.SetValue(FormsListViewAttachedProperties.ItemsViewProperty, Element);
-			nativeView.DragItemsStarting += HandleDragItemsStarting;
-			nativeView.DragItemsCompleted += HandleDragItemsCompleted;
 		}
 
 		protected override void DisconnectHandler(ListViewBase nativeView)
 		{
 			nativeView.ClearValue(FormsListViewAttachedProperties.ItemsViewProperty);
-			nativeView.DragItemsStarting -= HandleDragItemsStarting;
-			nativeView.DragItemsCompleted -= HandleDragItemsCompleted;
-
 			base.DisconnectHandler(nativeView);
 		}
 
@@ -45,56 +36,6 @@ namespace VariableSpanCollectionView.Maui
 				Source = itemsSource,
 				IsSourceGrouped = false
 			};
-		}
-
-		/*
-		// The Maui implementation of this method is not virtual so we can't override.
-		// Some of the ScrollTo functions may not work properly.
-		protected override object FindBoundItem(ScrollToRequestEventArgs args)
-		{
-			if (Element.IsGrouped)
-			{
-				return base.FindBoundItem(args);
-			}
-
-			if (args.Mode == ScrollToMode.Position)
-			{
-				if (args.Index >= ItemCount)
-				{
-					return null;
-				}
-
-				return GetItem(args.Index);
-			}
-
-			return args.Item;
-		}*/
-
-		void HandleDragItemsStarting(object sender, DragItemsStartingEventArgs e)
-		{
-			// Built in reordering only supports ungrouped sources & observable collections.
-			var supportsReorder = Element != null && !Element.IsGrouped && Element.ItemsSource is INotifyCollectionChanged;
-			if (supportsReorder)
-			{
-				// The AllowDrop property needs to be enabled when we start the drag operation.
-				// We can't simply enable it when we set CanReorderItems because the VisualElementTracker also updates this property.
-				// That means the tracker can overwrite any set we do in UpdateCanReorderItems.
-				// To avoid that possibility, let's force it to true when the user begins to drag an item.
-				// Reset it back to what it was when finished.
-				_trackerAllowDrop = ListViewBase.AllowDrop;
-				ListViewBase.AllowDrop = true;
-			}
-			else
-			{
-				e.Cancel = true;
-			}
-		}
-
-		void HandleDragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
-		{
-			ListViewBase.AllowDrop = _trackerAllowDrop;
-
-			Element?.SendReorderCompleted();
 		}
 
 		/*  
@@ -124,11 +65,6 @@ namespace VariableSpanCollectionView.Maui
 			}
 		}*/
 
-		public static void MapCanReorderItems(VariableSpanCollectionViewHandler handler, VariableSpanCollectionView itemsView)
-		{
-			handler.UpdateCanReorderItems();
-		}
-
 		protected override ListViewBase SelectListViewBase()
 		{
 			switch (Layout)
@@ -141,27 +77,6 @@ namespace VariableSpanCollectionView.Maui
 					return gridView;
 				default:
 					return base.SelectListViewBase();
-			}
-		}
-
-		void UpdateCanReorderItems()
-		{
-			if (Element == null || ListViewBase == null)
-			{
-				return;
-			}
-
-			if (Element.CanReorderItems)
-			{
-				ListViewBase.CanDragItems = true;
-				ListViewBase.CanReorderItems = true;
-				ListViewBase.IsSwipeEnabled = true; // Needed so user can reorder with touch (according to docs).
-			}
-			else
-			{
-				ListViewBase.CanDragItems = false;
-				ListViewBase.CanReorderItems = false;
-				ListViewBase.IsSwipeEnabled = false;
 			}
 		}
 
