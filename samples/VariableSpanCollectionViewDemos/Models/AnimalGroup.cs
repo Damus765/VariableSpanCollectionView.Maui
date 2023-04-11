@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace VariableSpanCollectionViewDemos.Models
 {
-    public class AnimalGroup : ObservableCollection<Animal>
+    public class AnimalGroup : List<Animal>
     {
         public string Name { get; private set; }
 
