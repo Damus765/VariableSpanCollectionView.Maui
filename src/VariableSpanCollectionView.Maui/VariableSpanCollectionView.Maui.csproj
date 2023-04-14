@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
@@ -17,14 +17,14 @@
 		<AssemblyName>VariableSpanCollectionView.Maui</AssemblyName>
 		<RootNamespace>VariableSpanCollectionView.Maui</RootNamespace>
 		<PackageId>VariableSpanCollectionView.Maui</PackageId>
-		<Version>1.0.0-preview.11.2349</Version>
-		<Authors>Bill Venhaus</Authors>
+		<Version>1.0.0</Version>
+		<Authors>Robin Grenet</Authors>
 		<Description>VariableSpanCollectionView for .NET MAUI</Description>
-		<Copyright>Copyright 2022</Copyright>
+		<Copyright>Copyright 2023</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/billvenhaus/ReorderableCollectionView.Maui</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/billvenhaus/ReorderableCollectionView.Maui</RepositoryUrl>
-		<PackageTags>maui variablespancollectionview collectionview variablespancollectionview.maui xamarin forms</PackageTags>
+		<PackageProjectUrl>https://github.com/Damus765/VariableSpanCollectionView.Maui</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Damus765/VariableSpanCollectionView.Maui</RepositoryUrl>
+		<PackageTags>maui variablespancollectionview collectionview variablespancollectionview.maui</PackageTags>
 	</PropertyGroup>
 
 </Project>
