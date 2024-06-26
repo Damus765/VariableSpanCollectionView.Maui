@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -10,9 +11,21 @@ namespace VariableSpanCollectionView.Maui
 {
 	public class VariableSpanCollectionView : CollectionView
 	{
+		readonly EventHandler OnUnloaded;
 		INotifyCollectionChanged _notifyCollection;
 		IItemsLayout _itemsLayout;
 		IPlatformSizeService _platformSizeService;
+
+		public VariableSpanCollectionView() : base() 
+		{
+			OnUnloaded = (o, e) =>
+		{
+			Unloaded -= OnUnloaded;
+			_itemsLayout.PropertyChanged -= HandleLayoutPropertyChanged;
+			_notifyCollection.CollectionChanged -= HandleCollectionChanged;
+		};
+			Unloaded += OnUnloaded;
+		}
 
 		void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -30,7 +43,7 @@ namespace VariableSpanCollectionView.Maui
 			}
 		}
 
-		void HandleLayoutPropertyChanged(object sender, PropertyChangedEventArgs e)
+        void HandleLayoutPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (ItemsLayout is VariableSpanGridItemsLayout)
 			{
@@ -55,7 +68,7 @@ namespace VariableSpanCollectionView.Maui
 				InvalidateMeasureNonVirtual(InvalidationTrigger.MeasureChanged);
 			}
 		}
-
+		
 		protected virtual void OnItemsSourceChanged()
 		{
 			if (_notifyCollection != null)
@@ -92,7 +105,7 @@ namespace VariableSpanCollectionView.Maui
 				return base.OnMeasure(widthConstraint, heightConstraint);
 			}
 		}
-
+		
 		protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			if (propertyName == ItemsLayoutProperty.PropertyName)
